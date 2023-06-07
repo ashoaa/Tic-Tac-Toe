@@ -1,0 +1,11 @@
+.button {
+  display: grid;
+  width: auto;
+  justify-items: center;
+}
+
+#reset-btn {
+  font-weight: 500;
+  font-size: 1.3rem;
+  border-width: 2px;
+}

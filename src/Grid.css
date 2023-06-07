@@ -1,0 +1,41 @@
+.choice {
+  font-size: 4rem;
+}
+.grid {
+  margin: 2rem auto;
+  height: 330px;
+  width: 330px;
+}
+.row {
+  height: 110px;
+  width: 330px;
+}
+.cell {
+  display: grid;
+  align-items: center;
+  height: 100%;
+}
+.not_selected:hover {
+  background-color: #0d6dfd4b;
+  cursor: pointer;
+}
+
+.circle {
+  color: #6610f2;
+}
+
+.x {
+  color: #fd7e14;
+}
+
+.win {
+  animation: win_animation 0.5s infinite alternate-reverse;
+}
+@keyframes win_animation {
+  from {
+    background-color: rgba(0, 128, 0, 0.162);
+  }
+  to {
+    background-color: rgba(0, 128, 0, 0.507);
+  }
+}

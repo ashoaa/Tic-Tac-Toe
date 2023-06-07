@@ -1,0 +1,14 @@
+.player-icon {
+  font-size: 1.4rem;
+}
+.player-name {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 480px) {
+  #result-device {
+    margin-top: 3.8rem !important;
+    margin-bottom: 1.3rem !important;
+  }
+}
