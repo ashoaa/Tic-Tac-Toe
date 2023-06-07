@@ -18,7 +18,6 @@ const Result = (props) => {
           &nbsp;{props.result[0]}
         </div>
       </div>
-      ;
     </>
   );
 };
