@@ -4,7 +4,7 @@ import "./Result.css";
 const Result = (props) => {
   return (
     <>
-      <div id="result-device" className="row col-6 mx-auto h-auto">
+      <div id="result-device" className="row col-6 mx-auto h-auto mb-5">
         <div className="col text-center player-name">
           Player <i className="bi bi-circle circle player-icon"></i>
           &nbsp;
