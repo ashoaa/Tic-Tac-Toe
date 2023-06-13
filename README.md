@@ -1,2 +1,3 @@
 # Tic-Tac-Toe
-Tic-Tac-Toe game using React.js and Bootstrap.
+
+Tic-Tac-Toe game using React.js, Redux, and Bootstrap.
