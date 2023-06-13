@@ -1,0 +1,10 @@
+body {
+  user-select: none;
+  background-image: linear-gradient(
+      rgba(122, 124, 240, 0.18) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to right, rgba(122, 124, 240, 0.18) 1px, transparent 1px);
+  background-size: 78px 78px;
+  background-color: #dcf6ff !important;
+}

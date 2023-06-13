@@ -1,6 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { gameActions } from "./store/store.jsx";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import "./Grid.css";
+
 const winConditions = [
   [0, 1, 2],
   [3, 4, 5],
@@ -11,31 +15,46 @@ const winConditions = [
   [0, 4, 8],
   [2, 4, 6],
 ];
-
-const Grid = (props) => {
-  const [data, setData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+let start = true;
+let data;
+let winCell;
+const rowKeys = ["r1", "r2", "r3"];
+const cellClasses = [
+  "border-end",
+  "border-end",
+  " ",
+  "border-end border-top",
+  "border-end border-top",
+  "border-top",
+  "border-end border-top",
+  "border-end border-top",
+  "border-top",
+];
+const Grid = () => {
   const [player1, setPlayer1] = useState(true);
-  const [winCell, setWinCell] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
-  const [finished, setFinished] = useState(false);
+  const reset = useSelector((state) => state.reset);
+  const finished = useSelector((state) => state.finished);
+  const dispatch = useDispatch();
+
+  if (start) {
+    data = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    winCell = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  }
 
   const win = (data) => {
     for (let i of winConditions) {
       if (data[i[0]] === 1 && data[i[1]] === 1 && data[i[2]] === 1) {
-        let new_cell = [...winCell];
-        new_cell[i[0]] = 1;
-        new_cell[i[1]] = 1;
-        new_cell[i[2]] = 1;
-        setFinished(true);
-        setWinCell(new_cell);
-        props.win(0);
+        winCell[i[0]] = 1;
+        winCell[i[1]] = 1;
+        winCell[i[2]] = 1;
+        dispatch(gameActions.finishGame(true));
+        dispatch(gameActions.player1Win());
       } else if (data[i[0]] === -1 && data[i[1]] === -1 && data[i[2]] === -1) {
-        let new_cell = [...winCell];
-        new_cell[i[0]] = 1;
-        new_cell[i[1]] = 1;
-        new_cell[i[2]] = 1;
-        setFinished(true);
-        setWinCell(new_cell);
-        props.win(1);
+        winCell[i[0]] = 1;
+        winCell[i[1]] = 1;
+        winCell[i[2]] = 1;
+        dispatch(gameActions.finishGame(true));
+        dispatch(gameActions.player2Win());
       }
     }
   };
@@ -44,16 +63,17 @@ const Grid = (props) => {
     if (!finished) {
       win(data);
     }
-  }, [data]);
+  }, [data.reduce((current, next) => (current += next))]);
+
   useEffect(() => {
-    if (props.reset) {
-      props.default();
-      setData([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    if (reset) {
+      data = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+      winCell = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+      dispatch(gameActions.resetGame(false));
+      dispatch(gameActions.finishGame(false));
       setPlayer1(true);
-      setFinished(false);
-      setWinCell([0, 0, 0, 0, 0, 0, 0, 0, 0]);
     }
-  }, [props.reset]);
+  }, [reset]);
 
   const content = data.map((value, index) => {
     if (value === 1) {
@@ -66,104 +86,41 @@ const Grid = (props) => {
   });
 
   const choiceHandler = (event) => {
+    start = false;
     if (!finished) {
       const index = parseInt(event.currentTarget.id[1]);
-      let new_data = [...data];
-      if (player1 && new_data[index] === 0) {
-        new_data[index] = 1;
+      if (player1 && data[index] === 0) {
+        data[index] = 1;
         setPlayer1(false);
-      } else if (!player1 && new_data[index] === 0) {
-        new_data[index] = -1;
+      } else if (!player1 && data[index] === 0) {
+        data[index] = -1;
         setPlayer1(true);
       }
-      setData(new_data);
     }
   };
+  const grid = rowKeys.map((rowkey, rowIndex) => (
+    <div key={rowkey} className="row col-6 mx-auto">
+      {rowKeys.map((_, cellIndex) => (
+        <div
+          key={`${rowIndex * 3 + cellIndex}`}
+          id={"_" + (rowIndex * 3 + cellIndex)}
+          className={`col border-3 cell border-primary ${
+            cellClasses[rowIndex * 3 + cellIndex]
+          } ${
+            data[rowIndex * 3 + cellIndex] === 0 && !finished
+              ? "not_selected"
+              : ""
+          } ${winCell[rowIndex * 3 + cellIndex] === 1 ? "win" : ""}`}
+          onClick={choiceHandler}>
+          {content[rowIndex * 3 + cellIndex]}
+        </div>
+      ))}
+    </div>
+  ));
 
   return (
     <>
-      <div className="grid text-center">
-        <div className="row col-6 mx-auto">
-          <div
-            id="_0"
-            className={`col border-end border-3 cell border-primary ${
-              data[0] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[0] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[0]}
-          </div>
-          <div
-            id="_1"
-            className={`col border-end border-3 cell border-primary ${
-              data[1] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[1] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[1]}
-          </div>
-          <div
-            id="_2"
-            className={`col cell ${
-              data[2] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[2] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[2]}
-          </div>
-        </div>
-
-        <div className="row col-6 mx-auto">
-          <div
-            id="_3"
-            className={`col border-end border-top border-3 cell border-primary ${
-              data[3] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[3] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[3]}
-          </div>
-          <div
-            id="_4"
-            className={`col border-end border-top border-3 cell border-primary ${
-              data[4] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[4] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[4]}
-          </div>
-          <div
-            id="_5"
-            className={`col border-top border-3 cell border-primary ${
-              data[5] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[5] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[5]}
-          </div>
-        </div>
-
-        <div className="row col-6 mx-auto">
-          <div
-            id="_6"
-            className={`col border-end border-top border-3 cell border-primary ${
-              data[6] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[6] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[6]}
-          </div>
-          <div
-            id="_7"
-            className={`col border-end border-top border-3 cell border-primary ${
-              data[7] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[7] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[7]}
-          </div>
-          <div
-            id="_8"
-            className={`col border-top border-3 cell border-primary ${
-              data[8] === 0 && !finished ? "not_selected" : ""
-            } ${winCell[8] === 1 ? "win" : ""}`}
-            onClick={choiceHandler}>
-            {content[8]}
-          </div>
-        </div>
-      </div>
+      <div className="grid text-center">{grid}</div>
     </>
   );
 };

@@ -1,7 +1,10 @@
 import "./Reset.css";
-const Reset = (props) => {
+import { useDispatch } from "react-redux";
+import { gameActions } from "./store/store.jsx";
+const Reset = () => {
+  const dispatch = useDispatch();
   const clickHandler = () => {
-    props.onReset();
+    dispatch(gameActions.resetGame(true));
   };
   return (
     <>
