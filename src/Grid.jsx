@@ -58,7 +58,9 @@ const Grid = () => {
       }
     }
   };
-
+  useEffect(() => {
+    dispatch(gameActions.finishGame(false));
+  }, []);
   useEffect(() => {
     if (!finished) {
       win(data);
