@@ -7,7 +7,6 @@ const Reset = () => {
     dispatch(gameActions.resetGame(true));
   };
   const clickResultHandler = () => {
-    // localStorage.clear();
     dispatch(gameActions.resetALL());
   };
   return (
@@ -17,7 +16,7 @@ const Reset = () => {
           id="reset-btn1"
           className="btn btn-outline-danger px-2"
           onClick={clickResultHandler}>
-          Reset All
+          Reset Results
         </button>
         <button
           id="reset-btn2"
