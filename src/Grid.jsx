@@ -99,7 +99,7 @@ const Grid = () => {
     }
   };
   const grid = rowKeys.map((rowkey, rowIndex) => (
-    <div key={rowkey} className="row col-6 mx-auto">
+    <div key={rowkey} className="row mx-auto">
       {rowKeys.map((_, cellIndex) => (
         <div
           key={`${rowIndex * 3 + cellIndex}`}
