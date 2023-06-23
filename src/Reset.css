@@ -1,11 +1,22 @@
 .button {
   display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 2rem;
   width: auto;
-  justify-items: center;
+  justify-items: end;
 }
 
-#reset-btn {
+#reset-btn1 {
+  width: 120px;
   font-weight: 500;
-  font-size: 1.3rem;
+  font-size: 1rem;
   border-width: 2px;
+}
+
+#reset-btn2 {
+  width: 120px;
+  font-weight: 500;
+  font-size: 1rem;
+  border-width: 2px;
+  justify-self: start;
 }
